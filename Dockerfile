@@ -6,12 +6,14 @@ WORKDIR /var/www
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
-    libsqlite3-dev \
+    libpq-dev \
     zip \
     unzip \
     git \
     curl \
-    && docker-php-ext-install pdo pdo_sqlite
+    postgresql-client \
+    libicu-dev \
+    && docker-php-ext-install intl pdo pdo_pgsql
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -27,7 +29,6 @@ RUN mkdir -p /var/www/storage /var/www/bootstrap/cache
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 777 database database/database.sqlite storage bootstrap/cache
 
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000
