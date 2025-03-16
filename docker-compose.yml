@@ -12,7 +12,7 @@ services:
       - ./storage:/var/www/storage
       - ./bootstrap/cache:/var/www/bootstrap/cache
     depends_on:
-      - db
+      - postgres_db
     networks:
       - laravel
     environment:
@@ -23,7 +23,7 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
 
-  db:
+  postgres_db:
     image: postgres:15
     container_name: postgres_db
     restart: unless-stopped
