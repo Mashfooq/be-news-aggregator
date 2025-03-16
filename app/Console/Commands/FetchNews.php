@@ -31,6 +31,8 @@ class FetchNews extends Command
     // List the API urls from where you want to fetch the news articles
     private $apiUrls = [];
 
+    private $openRouterApiKey = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -46,6 +48,9 @@ class FetchNews extends Command
     {
         $this->info(string: 'Fetching news articles...');
 
+        $this->openRouterApiKey = env('OPENROUTER_API_KEY');
+
+        // Fetch all categories and sources from the database
         $this->storedCategories = Category::pluck('id', 'name')->toArray();
         $this->storedSources = Source::pluck('id', 'name')->toArray();
 
@@ -235,14 +240,13 @@ class FetchNews extends Command
             return Cache::get($cacheKey);
         }
 
-        $apiKey = env('OPENROUTER_API_KEY');
         $content = "Title: {$title}. Description: " . ($description ?? 'No description available.');
 
         // Try each model until we get a successful response
         foreach ($this->models as $model) {
             try {
                 $response = Http::withHeaders([
-                    'Authorization' => "Bearer $apiKey",
+                    'Authorization' => "Bearer $this->openRouterApiKey",
                     'Content-Type' => 'application/json',
                 ])
                     ->timeout(60)
