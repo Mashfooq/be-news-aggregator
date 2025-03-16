@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title')->index();
             $table->text('content')->nullable();
-            $table->string('url')->unique();
-            $table->string('image_url')->nullable();
+            $table->text('url')->unique();
+            $table->text('image_url')->nullable();
             $table->foreignId('source_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->dateTime('published_at')->index();

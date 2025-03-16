@@ -44,7 +44,17 @@ class UserPreferenceController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $preferences = UserPreference::where('user_id', $user->id)->get();
+        $preferences = UserPreference::selectRaw('
+            user_id, users.name,
+            jsonb_object_agg(sources.id, sources.name) FILTER (WHERE sources.id IS NOT NULL) AS sources,
+            jsonb_object_agg(categories.id, categories.name) FILTER (WHERE categories.id IS NOT NULL) AS categories
+            ')
+            ->leftJoin('sources', 'sources.id', '=', 'user_preferences.source_id')
+            ->leftJoin('categories', 'categories.id', '=', 'user_preferences.category_id')
+            ->leftJoin('users','users.id','=','user_preferences.user_id')
+            ->where('user_id', $user->id)
+            ->groupBy('user_id', 'users.name')
+            ->get();
 
         return response()->json($preferences);
     }
