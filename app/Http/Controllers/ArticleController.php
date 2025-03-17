@@ -5,9 +5,71 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
+/**
+ * @OA\Tag(
+ *     name="Articles",
+ *     description="API Endpoints for managing news articles"
+ * )
+ */
 class ArticleController extends Controller
 {
-    // Fetch all articles with search, filter, pagination
+    /**
+     * Fetch all articles with search, filter, and pagination.
+     *
+     * @OA\Get(
+     *     path="/articles",
+     *     summary="Get a list of articles",
+     *     tags={"Articles"},
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Search keyword in title or content",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="date",
+     *         in="query",
+     *         description="Filter articles by published date (YYYY-MM-DD)",
+     *         required=false,
+     *         @OA\Schema(type="string", format="date")
+     *     ),
+     *     @OA\Parameter(
+     *         name="category_id",
+     *         in="query",
+     *         description="Filter articles by category ID",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="source_id",
+     *         in="query",
+     *         description="Filter articles by source ID",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number for pagination",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of articles",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Article")),
+     *             @OA\Property(property="links", type="object"),
+     *             @OA\Property(property="meta", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(response=400, description="Bad request"),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
     public function index(Request $request)
     {
         $query = Article::query();
@@ -39,7 +101,30 @@ class ArticleController extends Controller
         return response()->json($articles);
     }
 
-    // Fetch a single article
+    /**
+     * Fetch a single article by ID.
+     *
+     * @OA\Get(
+     *     path="/articles/{id}",
+     *     summary="Get a single article",
+     *     tags={"Articles"},
+     *     security={{ "bearerAuth":{} }},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the article",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Article details",
+     *         @OA\JsonContent(ref="#/components/schemas/Article")
+     *     ),
+     *     @OA\Response(response=404, description="Article not found"),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
     public function show($id)
     {
         $article = Article::with(['source', 'category'])->findOrFail($id);
