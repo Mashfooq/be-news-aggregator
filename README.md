@@ -102,7 +102,13 @@ php artisan l5-swagger:generate
 docker-compose exec app chown -R www-data:www-data storage bootstrap/cache
 ```
 
-### 6. Access the Application
+### 6. Run the command to populate articles from Sources
+
+```bash
+docker-compose exec app php artisan news:fetch
+```
+
+### 7. Access the Application
 
 - **API**: http://localhost:8000/api
 - **API Documentation**: http://localhost:8000/api/documentation
