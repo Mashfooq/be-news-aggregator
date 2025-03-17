@@ -62,6 +62,15 @@ NYTIMES_API_KEY=your_api_key
 OPENROUTER_API_KEY=your_api_key
 ```
 
+### API Keys
+
+To obtain the required API keys for the news sources and OpenRouter:
+
+- **NEWS_API_KEY**: Register at [News API](https://newsapi.org/)
+- **GUARDIAN_API_KEY**: Get access at [The Guardian Open Platform](https://open-platform.theguardian.com/access/)
+- **NYTIMES_API_KEY**: Register at [New York Times Developer Portal](https://developer.nytimes.com/get-started)
+- **OPENROUTER_API_KEY**: Generate a key at [OpenRouter Settings](https://openrouter.ai/settings/keys)
+
 ### 3. Build and Start Docker Containers
 
 ```bash
