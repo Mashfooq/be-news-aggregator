@@ -3,9 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+// Root URL route
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    return view('welcome');
 })->name('home');
+
+// API documentation route
+Route::get('/api', function () {
+    return view('welcome');
+})->name('api.home');
 
 // Route::middleware(['auth', 'verified'])->group(function () {
 //     Route::get('dashboard', function () {
