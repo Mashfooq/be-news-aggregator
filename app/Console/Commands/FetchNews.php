@@ -46,6 +46,11 @@ class FetchNews extends Command
 
     public function handle()
     {
+        $this->info(string: 'Task is aborted...');
+
+        // TODO: Remove this.
+        return;
+
         $this->info(string: 'Fetching news articles...');
 
         $this->openRouterApiKey = env('OPENROUTER_API_KEY');
